@@ -1,8 +1,8 @@
 # Aeneas Portal
 
-Startseite nach dem Login: Linktree (Chat, CAV, Support, Schulung, Cloud nur für Ämter) und später Mein Konto.
+FastAPI: Einstiegsseite nach OIDC-Login (Links zu Element, CAV, Zammad, Moodle; Nextcloud nur für Backoffice-Gruppen) und später Konto-Selbstbedienung.
 
-Noch ohne Keycloak-Login — das kommt als Nächstes, sobald der Realm in der Infra steht. Jetzt: eine HTML-Seite und `/health`, damit Compose etwas zum Weiterleiten hat.
+Aktuell ohne OIDC. Vorhanden: HTML-Stub und `GET /health` als Ziel für Compose/Traefik.
 
 Lokal ohne Docker:
 
@@ -13,4 +13,4 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-Produktion: Image wird von `aeneas_infra/compose.apps.yml` gebaut.
+Image-Build: `aeneas_infra/compose.apps.yml`.
