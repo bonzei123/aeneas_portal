@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <style>
+    body { font-family: sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    a { display: block; margin: 0.75rem 0; }
+    .hint { color: #555; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>{{ title }}</h1>
+  <p>Portal — Einstieg. Login folgt über Keycloak.</p>
+  {% for item in links %}
+  <p>
+    <a href="{{ item.href }}">{{ item.label }}</a>
+    <span class="hint">{{ item.hint }}</span>
+  </p>
+  {% endfor %}
+</body>
+</html>
