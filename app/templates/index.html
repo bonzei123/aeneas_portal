@@ -8,16 +8,37 @@
     body { font-family: sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
     a { display: block; margin: 0.75rem 0; }
     .hint { color: #555; font-size: 0.9rem; }
+    .meta { margin-bottom: 1.5rem; }
+    code { font-size: 0.9rem; }
   </style>
 </head>
 <body>
   <h1>{{ title }}</h1>
-  <p>Portal — Einstieg. Login folgt über Keycloak.</p>
+  {% if user %}
+  <div class="meta">
+    <p>{{ user.username }}{% if user.email %} ({{ user.email }}){% endif %}</p>
+    <p class="hint">Gruppen:
+      {% if user.groups %}
+        {% for g in user.groups %}<code>{{ g }}</code>{% if not loop.last %}, {% endif %}{% endfor %}
+      {% else %}
+        keine (Groups-Mapper am Client prüfen)
+      {% endif %}
+    </p>
+    <p><a href="/logout">Abmelden</a></p>
+  </div>
   {% for item in links %}
   <p>
     <a href="{{ item.href }}">{{ item.label }}</a>
     <span class="hint">{{ item.hint }}</span>
   </p>
   {% endfor %}
+  {% else %}
+  <p>Einstiegsseite. Anmeldung über Keycloak, Realm <code>aeneas</code>.</p>
+  {% if oidc_ready %}
+  <p><a href="/login">Anmelden</a></p>
+  {% else %}
+  <p class="hint"><code>PORTAL_OIDC_CLIENT_SECRET</code> fehlt in der Portal-Umgebung.</p>
+  {% endif %}
+  {% endif %}
 </body>
 </html>

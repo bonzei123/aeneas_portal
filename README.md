@@ -2,7 +2,7 @@
 
 FastAPI: Einstiegsseite nach OIDC-Login (Links zu Element, CAV, Zammad, Moodle; Nextcloud nur für Backoffice-Gruppen) und später Konto-Selbstbedienung.
 
-Aktuell ohne OIDC. Vorhanden: HTML-Stub und `GET /health` als Ziel für Compose/Traefik.
+OIDC gegen Keycloak (Realm `aeneas`, Client `portal`). `GET /health` bleibt ohne Auth. `/` zeigt Login bzw. Einstiegsseite plus Gruppen aus dem Token.
 
 Lokal ohne Docker:
 
