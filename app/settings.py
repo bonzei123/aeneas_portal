@@ -7,13 +7,13 @@ def _env(name: str, default: str = "") -> str:
 
 KEYCLOAK_REALM = os.environ.get("KEYCLOAK_REALM", "aeneas")
 KEYCLOAK_URL = _env("KEYCLOAK_URL", "http://keycloak:8080")
-KEYCLOAK_PUBLIC_URL = _env("KEYCLOAK_PUBLIC_URL", "http://id.aeneas.test")
-PORTAL_PUBLIC_URL = _env("PORTAL_PUBLIC_URL", "http://www.aeneas.test")
+KEYCLOAK_PUBLIC_URL = _env("KEYCLOAK_PUBLIC_URL", "https://id.aeneas-solutions.de")
+PORTAL_PUBLIC_URL = _env("PORTAL_PUBLIC_URL", "https://portal.aeneas-solutions.de")
 PORTAL_OIDC_CLIENT_ID = os.environ.get("PORTAL_OIDC_CLIENT_ID", "portal")
 PORTAL_OIDC_CLIENT_SECRET = os.environ.get("PORTAL_OIDC_CLIENT_SECRET", "")
 SESSION_SECRET = os.environ.get("SESSION_SECRET", "changeme-portal-session")
-DOMAIN = os.environ.get("DOMAIN", "aeneas.test").strip().lower()
-PUBLIC_SCHEME = os.environ.get("PUBLIC_SCHEME", "http").strip().lower()
+DOMAIN = os.environ.get("DOMAIN", "aeneas-solutions.de").strip().lower()
+PUBLIC_SCHEME = os.environ.get("PUBLIC_SCHEME", "https").strip().lower()
 
 
 def oidc_ready() -> bool:
