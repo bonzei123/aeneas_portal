@@ -12,17 +12,26 @@ app.add_middleware(
     SessionMiddleware,
     secret_key=settings.SESSION_SECRET,
     same_site="lax",
-    https_only=False,
+    https_only=settings.PUBLIC_SCHEME == "https",
 )
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 oidc.register()
 
-_LINKS = [
-    {"href": "/#chat", "label": "Chat (Element)", "hint": "später Matrix"},
-    {"href": "/#cav", "label": "Verein (CAV)", "hint": "später cav.DOMAIN"},
-    {"href": "/#help", "label": "Support (Zammad)", "hint": "öffentliches Formular später ohne Portal-Login"},
-    {"href": "/#learn", "label": "Schulungen (Moodle)", "hint": "Mitwirkung"},
-]
+
+def _page(request: Request, status_code: int = 200) -> HTMLResponse:
+    user = request.session.get("user")
+    groups = (user or {}).get("groups") or []
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "title": "Aeneas",
+            "user": user,
+            "oidc_ready": settings.oidc_ready(),
+            "tiles": settings.tiles(groups),
+        },
+        status_code=status_code,
+    )
 
 
 @app.get("/health")
@@ -32,33 +41,13 @@ def health() -> dict[str, str]:
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request) -> HTMLResponse:
-    user = request.session.get("user")
-    return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "title": "Aeneas",
-            "user": user,
-            "oidc_ready": settings.oidc_ready(),
-            "links": _LINKS,
-        },
-    )
+    return _page(request)
 
 
 @app.get("/login")
 async def login(request: Request):
     if not settings.oidc_ready():
-        return templates.TemplateResponse(
-            "index.html",
-            {
-                "request": request,
-                "title": "Aeneas",
-                "user": None,
-                "oidc_ready": False,
-                "links": _LINKS,
-            },
-            status_code=503,
-        )
+        return _page(request, status_code=503)
     return await oidc.oauth.keycloak.authorize_redirect(request, oidc.callback_uri())
 
 

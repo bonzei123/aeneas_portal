@@ -5,40 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ title }}</title>
   <style>
-    body { font-family: sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
-    a { display: block; margin: 0.75rem 0; }
-    .hint { color: #555; font-size: 0.9rem; }
-    .meta { margin-bottom: 1.5rem; }
-    code { font-size: 0.9rem; }
+    :root {
+      --bg: #12150f;
+      --fg: #e6eadc;
+      --muted: #8b927c;
+      --tile: #1c2218;
+      --line: #2c3526;
+      --leaf: #8fae6e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font: 16px/1.45 system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+    }
+    main { max-width: 36rem; margin: 0 auto; padding: 2.5rem 1.25rem; }
+    h1 { font-weight: 560; font-size: 1.35rem; letter-spacing: 0.04em; margin: 0 0 0.35rem; }
+    h1 span { color: var(--leaf); }
+    .who { color: var(--muted); font-size: 0.9rem; margin: 0 0 1.5rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+    }
+    a.tile {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 6.5rem;
+      padding: 1rem 1.05rem;
+      background: var(--tile);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--leaf);
+      color: inherit;
+      text-decoration: none;
+    }
+    a.tile:hover { border-color: var(--leaf); }
+    a.tile strong { font-weight: 560; }
+    a.tile small { color: var(--muted); font-size: 0.8rem; margin-top: 0.6rem; }
+    a.out { border-left-color: var(--line); color: var(--muted); }
+    a.out:hover { border-left-color: var(--fg); color: var(--fg); }
+    .groups { color: var(--muted); font-size: 0.78rem; margin: 1.5rem 0 0; }
+    code { color: var(--leaf); font-size: 0.85em; }
   </style>
 </head>
 <body>
-  <h1>{{ title }}</h1>
-  {% if user %}
-  <div class="meta">
-    <p>{{ user.username }}{% if user.email %} ({{ user.email }}){% endif %}</p>
-    <p class="hint">Gruppen:
+  <main>
+    <h1>Aeneas <span>Portal</span></h1>
+    {% if user %}
+    <p class="who">{{ user.username }}{% if user.email %} · {{ user.email }}{% endif %}</p>
+    <div class="grid">
+      {% for t in tiles %}
+      <a class="tile" href="{{ t.href }}">
+        <strong>{{ t.title }}</strong>
+        <small>{{ t.sub }}</small>
+      </a>
+      {% endfor %}
+      <a class="tile out" href="/logout">
+        <strong>Abmelden</strong>
+        <small>Keycloak</small>
+      </a>
+    </div>
+    <p class="groups">
       {% if user.groups %}
-        {% for g in user.groups %}<code>{{ g }}</code>{% if not loop.last %}, {% endif %}{% endfor %}
+        {% for g in user.groups %}<code>{{ g }}</code>{% if not loop.last %} {% endif %}{% endfor %}
       {% else %}
-        keine (Groups-Mapper am Client prüfen)
+        keine Gruppen — Mapper am Client <code>portal</code> prüfen
       {% endif %}
     </p>
-    <p><a href="/logout">Abmelden</a></p>
-  </div>
-  {% for item in links %}
-  <p>
-    <a href="{{ item.href }}">{{ item.label }}</a>
-    <span class="hint">{{ item.hint }}</span>
-  </p>
-  {% endfor %}
-  {% else %}
-  <p>Einstiegsseite. Anmeldung über Keycloak, Realm <code>aeneas</code>.</p>
-  {% if oidc_ready %}
-  <p><a href="/login">Anmelden</a></p>
-  {% else %}
-  <p class="hint"><code>PORTAL_OIDC_CLIENT_SECRET</code> fehlt in der Portal-Umgebung.</p>
-  {% endif %}
-  {% endif %}
+    {% else %}
+    <p class="who">Anmeldung über Keycloak, Realm <code>aeneas</code>.</p>
+    <div class="grid">
+      {% if oidc_ready %}
+      <a class="tile" href="/login">
+        <strong>Anmelden</strong>
+        <small>Keycloak</small>
+      </a>
+      {% else %}
+      <p class="who"><code>PORTAL_OIDC_CLIENT_SECRET</code> fehlt.</p>
+      {% endif %}
+    </div>
+    {% endif %}
+  </main>
 </body>
 </html>

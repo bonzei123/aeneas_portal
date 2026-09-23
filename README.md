@@ -1,6 +1,6 @@
 # Aeneas Portal
 
-FastAPI: Einstiegsseite nach OIDC-Login (Links zu Element, CAV, Zammad, Moodle; Nextcloud nur für Backoffice-Gruppen) und später Konto-Selbstbedienung.
+FastAPI: Einstiegsseite nach OIDC-Login (Kacheln zu CAV, Zammad, Frappe, Matrix; Nextcloud nur für Amtsgruppen) und später Konto-Selbstbedienung.
 
 OIDC gegen Keycloak (Realm `aeneas`, Client `portal`). `GET /health` bleibt ohne Auth. `/` zeigt Login bzw. Einstiegsseite plus Gruppen aus dem Token.
 
