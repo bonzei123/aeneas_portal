@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <style>
+    :root {
+      --bg: #12150f;
+      --fg: #e6eadc;
+      --muted: #8b927c;
+      --tile: #1c2218;
+      --line: #2c3526;
+      --leaf: #8fae6e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font: 16px/1.45 system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+    }
+    main { max-width: 36rem; margin: 0 auto; padding: 2.5rem 1.25rem; }
+    h1 { font-weight: 560; font-size: 1.35rem; letter-spacing: 0.04em; margin: 0 0 0.35rem; }
+    h1 span { color: var(--leaf); }
+    .who { color: var(--muted); font-size: 0.9rem; margin: 0 0 1.5rem; }
+    label { display: block; margin: 0.85rem 0 0.25rem; font-size: 0.9rem; }
+    input, textarea {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      background: var(--tile);
+      border: 1px solid var(--line);
+      color: var(--fg);
+      font: inherit;
+    }
+    textarea { min-height: 6rem; }
+    button, a.btn {
+      display: inline-block;
+      margin-top: 1.1rem;
+      padding: 0.55rem 1rem;
+      background: var(--tile);
+      border: 1px solid var(--leaf);
+      color: var(--fg);
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .err { color: #c97; }
+    .hp { position: absolute; left: -9999px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Mitglied <span>werden</span></h1>
+    {% if ok %}
+    <p class="who">Antrag ist raus. Du bekommst Zugangsdaten per E-Mail, sobald der Vorstand das Konto angelegt hat.</p>
+    <a class="btn" href="/">Zurück</a>
+    {% else %}
+    <p class="who">Kein Konto nötig. Der Vorstand legt dich danach in Keycloak an.</p>
+    {% if err %}<p class="err">{{ err }}</p>{% endif %}
+    <form method="post" action="/aufnahme">
+      <p class="hp"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></p>
+      <label>Name
+        <input type="text" name="name" required maxlength="120" value="{{ name }}">
+      </label>
+      <label>E-Mail
+        <input type="email" name="email" required maxlength="180" value="{{ email }}">
+      </label>
+      <label>Verein (falls bekannt)
+        <input type="text" name="verein" maxlength="120" value="{{ verein }}">
+      </label>
+      <label>Kurz dazu
+        <textarea name="note" maxlength="2000">{{ note }}</textarea>
+      </label>
+      <button type="submit">Antrag senden</button>
+    </form>
+    <p class="who"><a href="/" style="color: var(--muted);">Abbruch</a></p>
+    {% endif %}
+  </main>
+</body>
+</html>

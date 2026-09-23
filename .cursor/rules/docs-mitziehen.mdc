@@ -1,0 +1,10 @@
+---
+description: READMEs mitziehen; Stack von Anfang an richtig dokumentieren, keine Einmal-Fix-Skripte
+alwaysApply: true
+---
+
+# Doku mit dem Code
+
+Nach jeder nachträglichen Anpassung am Portal dieselbe Sache in `README.md` und in `aeneas_infra/SETUP.md` schreiben, so als ginge es beim ersten Setup genau so — nicht als Server-Nachzug.
+
+Keine Einmal-Skripte (`_fix_*.py` und ähnlich). Dauerhafte Config und Compose gehören in die Infra-Anleitung.
